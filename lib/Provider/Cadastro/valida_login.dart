@@ -7,10 +7,12 @@ class ValidarSenha extends ChangeNotifier{
   bool _valido = false;
   String _msgError = '';
   String _msgErrorApi = '';
+  bool _carregando = false;
 
   bool get ehvalido => _valido;
   String get msgError => _msgError;
   String get msgErrorApi => _msgErrorApi;
+  bool get carregando => _carregando;
 
   void validatePassword(String password){
     _msgError = '';
@@ -44,6 +46,8 @@ class ValidarSenha extends ChangeNotifier{
         'cpf': Cpf,
       };
 
+      _carregando = false;
+
       http.Response response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
@@ -53,7 +57,8 @@ class ValidarSenha extends ChangeNotifier{
       );
 
       if (response.statusCode == 200){
-        _msgErrorApi = "Uauário cadastrado com sucesso";
+        _carregando = true;
+        _msgErrorApi = "Usuário cadastrado com sucesso";
         notifyListeners();
       } else{
         _msgErrorApi = response.body;

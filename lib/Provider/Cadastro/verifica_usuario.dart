@@ -5,9 +5,11 @@ import 'package:projetoepi/Constrain/url.dart';
 class UsuarioCadastro extends ChangeNotifier {
   bool _valido = false;
   String? _msgError;
+  bool _carregando = false;
 
   bool get valido => _valido;
   String get msgError => _msgError!;
+  bool get carregando => _carregando;
 
   final String baseUrl = '${AppUrl.baseUrl}app/Usuario/Check';
 
@@ -17,12 +19,16 @@ class UsuarioCadastro extends ChangeNotifier {
       final response =
           await http.get(Uri.parse('$baseUrl?Cpf=$cpf&Email=$email'));
       _msgError = '';
+
+      _carregando = false;
       String resposta = '';
       resposta = response.body;
 
       if (response.statusCode == 200){
         _valido = true;
         _msgError = resposta;
+        _carregando = false;
+        notifyListeners();
         return _valido;
       }
 

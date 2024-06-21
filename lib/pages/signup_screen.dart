@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:projetoepi/Provider/Cadastro/verifica_usuario.dart';
 import 'package:projetoepi/pages/confirm_password.dart';
 import 'package:projetoepi/utils/mensage.dart';
+import 'package:projetoepi/widget/botao.dart';
 import 'package:projetoepi/widget/field.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +35,13 @@ class _SignupFormState extends State<SignupForm> {
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _cpfController = TextEditingController();
 
+@override
+  void dispose() {
+    _cpfController.clear();
+    _emailController.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UsuarioCadastro>(builder:(context, usuario, _){
@@ -55,9 +63,9 @@ final TextEditingController _cpfController = TextEditingController();
             CpfInputFormatter()]
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              usuario.checarUsuario(
+          customButton(
+            tap: () async{
+            await usuario.checarUsuario(
                 _cpfController.text,
                 _emailController.text);
                 
@@ -68,7 +76,7 @@ final TextEditingController _cpfController = TextEditingController();
                   builder: (context) => ConfirmPassword(
                     email: _emailController.text,
                     cpf: _cpfController.text,
-                  ))
+                  )),
               );
               } else {
                 showMessage(
@@ -76,7 +84,9 @@ final TextEditingController _cpfController = TextEditingController();
                   context: context);
               }
             },
-            child: const Text('Avatar'),
+            text: "Avatar",
+            context: context,
+            status: usuario.carregando
           )
         ]
       ),

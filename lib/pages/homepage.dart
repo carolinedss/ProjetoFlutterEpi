@@ -16,6 +16,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+
+  @override
+  void dispose() {
+   _email.clear();
+   _password.clear();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Logar>(builder: (context, logar, _){
@@ -68,15 +77,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   customButton(
                     text: 'Login',
-                    tap: () {
+                    tap: () async {
                       if (_email.text.isEmpty || _password.text.isEmpty){
                         showMessage(
                           message: "Todos os campos são requiridos",
                           context: context);
                       } else {
-                        logar.logarUsuario(_email.text, _password.text, 0);
+                        await logar.logarUsuario(_email.text, _password.text, 0);
                         if (logar.logado){
-                          Navigator.of(context).pushNamed('/dashboard');
+                          Navigator.of(context).pushNamed(logar.rota);
                         } else{
                           showMessage(
                             message: "Usuario ou senhas incorretas",
@@ -84,10 +93,11 @@ class _HomePageState extends State<HomePage> {
                         }
                       }
                     },
-                    context: context
+                    context: context,
+                    status: logar.carregando
                   ),
 
-                   SizedBox(height: 20,),
+                   const SizedBox(height: 20,),
                     TextButton(
                    
                       onPressed: () {

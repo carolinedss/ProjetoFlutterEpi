@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projetoepi/Provider/Cadastro/valida_login.dart';
 import 'package:projetoepi/utils/mensage.dart';
+import 'package:projetoepi/widget/botao.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmPassword extends StatelessWidget {
@@ -38,8 +39,8 @@ class ConfirmPassword extends StatelessWidget {
               obscureText: true
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
+            customButton(
+              tap: () async {
                 if(passwordController.text !=
                 confirmPasswordController.text){
                   showMessage(
@@ -55,9 +56,10 @@ class ConfirmPassword extends StatelessWidget {
                     );
                 }
               },
-              child: const Text('Concluir'),
+              text: "Concluir",
+              context: context,
+              status: validarsenhar.carregando
             )
-
           ],
         ),
       ),
